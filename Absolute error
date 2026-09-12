@@ -1,0 +1,57 @@
+# Analytical Solution
+
+def x_analytical(t):
+    return (
+        200
+        - (280/3) * np.exp(-0.2*t)
+        - (20/3) * np.exp(-0.5*t)
+    )
+
+
+def y_analytical(t):
+    return (
+        100
+        - (280/3) * np.exp(-0.2*t)
+        + (40/3) * np.exp(-0.5*t)
+    )
+
+
+# Calculate analytical solutions
+x_exact = x_analytical(t)
+y_exact = y_analytical(t)
+
+# Calculate Absolute Errors
+absolute_error_x = np.abs(x_num - x_exact)
+absolute_error_y = np.abs(y_num - y_exact)
+
+
+# Calculate Maximum Absolute Erro
+
+max_absolute_error_x = np.max(absolute_error_x)
+max_absolute_error_y = np.max(absolute_error_y)
+
+overall_max_absolute_error = max(
+    max_absolute_error_x,
+    max_absolute_error_y
+)
+
+
+# 11. Display Maximum Absolute Errors
+
+print("\nMaximum Absolute Error")
+print("----------------------")
+
+print(
+    f"Maximum absolute error for x(t): "
+    f"{max_absolute_error_x:.12e}"
+)
+
+print(
+    f"Maximum absolute error for y(t): "
+    f"{max_absolute_error_y:.12e}"
+)
+
+print(
+    f"Overall maximum absolute error: "
+    f"{overall_max_absolute_error:.12e}"
+)
