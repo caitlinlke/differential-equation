@@ -1,0 +1,70 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+
+# 1. Define the differential equations
+
+def model_50(t, z):
+    x, y = z
+
+    dxdt = -0.3*x + 0.1*y + 50
+    dydt = 0.2*x - 0.4*y
+
+    return [dxdt, dydt]
+
+
+# 2. Initial conditions and time interval
+
+x0 = 100
+y0 = 20
+
+initial_conditions = [x0, y0]
+
+t_start = 0
+t_end = 30
+
+t_eval = np.linspace(t_start, t_end, 1001)
+
+
+# 3. Numerical solution
+
+solution_50 = solve_ivp(
+    model_50,
+    [t_start, t_end],
+    initial_conditions,
+    t_eval=t_eval,
+    method='RK45',
+    rtol=1e-9,
+    atol=1e-11
+)
+
+t = solution_50.t
+x_num_50 = solution_50.y[0]
+y_num_50 = solution_50.y[1]
+
+
+# Plot graph
+
+plt.figure(figsize=(10, 6))
+
+plt.plot(t, x_num_50, label='Number of Potential Customers x(t)')
+plt.plot(t, y_num_50, label='Number of Active Customers y(t)')
+
+plt.xlabel('Time, t')
+plt.ylabel('Number of Customers')
+plt.title('Number of Potential Customers and Active Customers against Time')
+plt.legend()
+plt.grid(True)
+
+plt.show()
+
+# Display selected numerical values
+
+print("Numerical Solution")
+print("------------------")
+
+print(f"x(0)  = {x_num_50[0]:.6f}")
+print(f"y(0)  = {y_num_50[0]:.6f}")
+
+print(f"x(30) = {x_num_50[-1]:.6f}")
+print(f"y(30) = {y_num_50[-1]:.6f}")
