@@ -1,0 +1,145 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+
+# Initial conditions
+x0 = 100
+y0 = 20
+
+# Time interval: 0 <= t <= 30
+t_span = (0, 30)
+t = np.linspace(0, 30, 1000)
+
+
+# Advertising rate = 50
+
+def original_model(t, z):
+    x, y = z
+
+    dxdt = -0.3*x + 0.1*y + 50
+    dydt = 0.2*x - 0.4*y
+
+    return [dxdt, dydt]
+
+
+original = solve_ivp(
+    original_model,
+    t_span,
+    [x0, y0],
+    t_eval=t
+)
+
+x_original = original.y[0]
+y_original = original.y[1]
+
+
+# Advertising rate = 100
+def modified_model(t, z):
+    x, y = z
+
+    dxdt = -0.3*x + 0.1*y + 100
+    dydt = 0.2*x - 0.4*y
+
+    return [dxdt, dydt]
+
+
+modified = solve_ivp(
+    modified_model,
+    t_span,
+    [x0, y0],
+    t_eval=t
+)
+
+x_modified = modified.y[0]
+y_modified = modified.y[1]
+
+
+# GRAPH 1: Potential Customers x(t)
+
+plt.figure(figsize=(10, 6))
+
+plt.plot(t, x_original,
+         label='Advertising rate = 50')
+
+plt.plot(t, x_modified,
+         label='Advertising rate = 100')
+
+plt.xlabel('Time, t')
+plt.ylabel('Potential Customers, x(t)')
+plt.title('Comparison of Potential Customers x(t)')
+plt.legend()
+plt.grid(True)
+
+plt.show()
+
+
+# GRAPH 2: Active Customers y(t)
+
+plt.figure(figsize=(10, 6))
+
+plt.plot(t, y_original,
+         label='Advertising rate = 50')
+
+plt.plot(t, y_modified,
+         label='Advertising rate = 100')
+
+plt.xlabel('Time, t')
+plt.ylabel('Active Customers, y(t)')
+plt.title('Comparison of Active Customers y(t)')
+plt.legend()
+plt.grid(True)
+
+plt.show()
+
+
+# GRAPH 3: Modified Model
+
+plt.figure(figsize=(10, 6))
+
+plt.plot(t, x_modified,
+         label='Potential customers x(t)')
+
+plt.plot(t, y_modified,
+         label='Active customers y(t)')
+
+plt.xlabel('Time, t')
+plt.ylabel('Number of Customers')
+plt.title('Customer with Advertising Rate = 100')
+plt.legend()
+plt.grid(True)
+
+plt.show()
+
+
+
+# NUMERICAL SOLUTION  COMPARISON
+
+print("========== NUMERICAL COMPARISON ==========")
+
+print("\nAt t = 30:")
+
+print("\nOriginal model (advertising = 50):")
+print("Potential customers x(30) =", x_original[-1])
+print("Active customers y(30)    =", y_original[-1])
+
+print("\nModified model (advertising = 100):")
+print("Potential customers x(30) =", x_modified[-1])
+print("Active customers y(30)    =", y_modified[-1])
+
+print("\nIncrease caused by intensified advertising:")
+
+print("Increase in potential customers =",
+      x_modified[-1] - x_original[-1])
+
+print("Increase in active customers =",
+      y_modified[-1] - y_original[-1])
+
+print("\nPercentage increase:")
+
+print("Potential customers =",
+      (x_modified[-1] - x_original[-1]) /
+      x_original[-1] * 100, "%")
+
+print("Active customers =",
+      (y_modified[-1] - y_original[-1]) /
+      y_original[-1] * 100, "%")
